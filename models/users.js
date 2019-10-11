@@ -30,7 +30,10 @@ modified: {
   type: Date,
   default: Date.now
 }
-
+Users.pre('save', function(next){
+  this.modified = new Date().toISOString();
+  next();
+});
 //Add unique validation properties to the model
 Users.plugin(uniqueValidator);
 
