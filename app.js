@@ -10,11 +10,8 @@ var apiUsersRouter = require('./routes/api/users');
 
 var app = express();
 
-
 var config = require('./config.dev');
-
-//Test the file
-// console.log(config);
+var mongoose = require('mongoose');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,7 +25,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
 app.use('/api/users', apiUsersRouter);
 
 // catch 404 and forward to error handler
@@ -47,7 +43,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
-
 //Connect to MongoDB
 mongoose.connect(config.mongodb, { useNewUrlParser: true });
+
+module.exports = app;
