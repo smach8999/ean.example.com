@@ -21,6 +21,15 @@ var Users = new Schema({
     default: false
   }
 });
+,
+created: {
+  type: Date,
+  default: Date.now
+},
+modified: {
+  type: Date,
+  default: Date.now
+}
 
 //Add unique validation properties to the model
 Users.plugin(uniqueValidator);
