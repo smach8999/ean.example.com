@@ -44,3 +44,6 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+
+//Connect to MongoDB
+mongoose.connect(config.mongodb, { useNewUrlParser: true });
