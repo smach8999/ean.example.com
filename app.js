@@ -4,6 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var session = require('express-session');
+var mongoose = require('mongoose');
+var passport = require('passport');
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var apiUsersRouter = require('./routes/api/users');
@@ -11,10 +15,10 @@ var LocalStrategy = require('passport-local').Strategy;
 var app = express();
 var Users = require('./models/users');
 var config = require('./config.dev');
-var mongoose = require('mongoose');
-var session = require('express-session');
+
+
+var apiAuthRouter = require('./routes/api/auth');
 var MongoStore = require('connect-mongo')(session);
-var passport = require('passport');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -51,7 +55,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // catch 404 and forward to error handler
-
+passport.use(Users.createStrategy());
 app.use(function(req, res, next) {
   next(createError(404));
 });
@@ -69,5 +73,7 @@ app.use(function(err, req, res, next) {
 
 //Connect to MongoDB
 mongoose.connect(config.mongodb, { useNewUrlParser: true });
+
+app.use('/api/auth', apiAuthRouter);
 
 module.exports = app;
