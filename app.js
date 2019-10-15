@@ -6,8 +6,15 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
+var apiUsersRouter = require('./routes/api/users');
+var LocalStrategy = require('passport-local').Strategy;
 var app = express();
+var Users = require('./models/users');
+var config = require('./config.dev');
+var mongoose = require('mongoose');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
+var passport = require('passport');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,8 +28,30 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/api/users', apiUsersRouter);
+
+app.use(require('express-session')({
+  //Define the session store
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection
+  }),
+  //Set the secret
+  secret: config.session.secret,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    path: '/',
+    domain: config.cookie.domain,
+    //httpOnly: true,
+    //secure: true,
+    maxAge:3600000 //1 hour
+  }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // catch 404 and forward to error handler
+
 app.use(function(req, res, next) {
   next(createError(404));
 });
@@ -37,5 +66,8 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+//Connect to MongoDB
+mongoose.connect(config.mongodb, { useNewUrlParser: true });
 
 module.exports = app;
