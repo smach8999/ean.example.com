@@ -15,10 +15,10 @@ var LocalStrategy = require('passport-local').Strategy;
 var app = express();
 var Users = require('./models/users');
 var config = require('./config.dev');
-
-
 var apiAuthRouter = require('./routes/api/auth');
 var MongoStore = require('connect-mongo')(session);
+//Connect to MongoDB
+mongoose.connect(config.mongodb, { useNewUrlParser: true });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
