@@ -33,8 +33,15 @@ var Users = new Schema({
   
 });
 
-
 //Add unique validation properties to the model
 Users.plugin(uniqueValidator);
+
+Users.plugin(passportLocalMongoose);
+
+//Auto-update the modified date on edit
+Users.pre('save', function(next){
+    this.modified = new Date().toISOString();
+    next();
+});
 
 module.exports  = mongoose.model('Users', Users);
