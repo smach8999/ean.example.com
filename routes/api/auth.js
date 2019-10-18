@@ -4,6 +4,10 @@ var router = express.Router();
 var Users = require('../../models/users');
 var passport = require('passport');
 
+router.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/auth');
+});
 
 router.post('/register', function(req,res,next){
   var data = req.body;
@@ -61,6 +65,16 @@ router.post('/login', function(req, res, next) {
     });
   })(req, res, next);
 });
+
+router.delete('/logout', function(req, res){
+  req.logout();
+  if(!req.session.passport.user){
+    return res.json({success: 'true'});
+  }else{
+    return res.json({success: 'false'});
+  }
+});
+
 router.get('/logout', function(req, res){
   req.logout();
 });
