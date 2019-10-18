@@ -25,6 +25,8 @@ var authApp = (function() {
   
       app.innerHTML=form;
     }
+
+    
   
     return {
       load: function(){
