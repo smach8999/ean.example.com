@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
 var mongoose = require('mongoose');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
@@ -52,6 +53,10 @@ app.use(require('express-session')({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+app.use('/api/users', apiUsersRouter);
+
 passport.use(Users.createStrategy());
 passport.serializeUser(function(user, done){
   done(null,{
@@ -66,19 +71,15 @@ passport.serializeUser(function(user, done){
 passport.deserializeUser(function(user, done){
   done(null, user);
 });
-    
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/api/users', apiUsersRouter);
-
 app.use(function(req,res,next){
   res.locals.session = req.session;
   next();
-});
+}); 
 
 app.use('/api/auth', apiAuthRouter);
 app.use('/auth', authRouter);
 // catch 404 and forward to error handler
+
 app.use(function(req, res, next) {
   next(createError(404));
 });
@@ -94,6 +95,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-console.log('connected to ');
-console.log(config);
+// console.log('connected to ');
+// console.log(config);
 module.exports = app;
