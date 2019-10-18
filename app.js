@@ -71,6 +71,11 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/users', apiUsersRouter);
 
+app.use(function(req,res,next){
+  res.locals.session = req.session;
+  next();
+});
+
 app.use('/api/auth', apiAuthRouter);
 app.use('/auth', authRouter);
 // catch 404 and forward to error handler
