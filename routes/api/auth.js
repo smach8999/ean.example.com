@@ -22,20 +22,16 @@ router.post('/register', function(req,res,next){
   function(err, user){
 
     if(err){
-
       return res.json({
         success: false, 
         user: req.body, 
         errors: err
-      });
-      
+      });    
     }
-
     return res.json({
       success: true,
       user: user
     });
-
   });
 
 });
