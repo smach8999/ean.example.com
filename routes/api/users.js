@@ -41,6 +41,8 @@ router.get('/:userId', function(req,res){
   });
 });
 
+// Sending a json payload with an id, over a PUT request to the api/users 
+// endpoint shall update an existing user record.
 router.put('/', function(req, res){
 
   Users.findOne({'_id': req.body._id}, function(err, user){
@@ -81,5 +83,22 @@ router.put('/', function(req, res){
 
   });
   
+});
+
+//  DELETE request shall delete the user with that id
+router.delete('/:userId', function(req,res){
+
+  var userId = req.params.userId;
+
+  Users.remove({'_id':userId}, function(err,removed){
+
+    if(err){
+      return res.json({success: false, error: err});
+    }
+
+    return res.json({success: true, status: removed});
+
+  });
+
 });
 module.exports = router;
