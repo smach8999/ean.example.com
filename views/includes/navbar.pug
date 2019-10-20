@@ -2,7 +2,7 @@
 nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
   .container
     a.navbar-brand(href='#') 
-      //-Use Font Awesome for a generic logo
+      // Use Font Awesome for a generic logo
       i.fas.fa-asterisk
       |&nbsp;MY API
     button.navbar-toggler(
@@ -13,6 +13,9 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
       aria-expanded='false' 
       aria-label='Toggle navigation'
     )
+//-Include the navbar
+include includes/navbar
+
       span.navbar-toggler-icon
     #navbarSupportedContent.collapse.navbar-collapse
       ul.navbar-nav.ml-auto
@@ -20,12 +23,9 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
           a.nav-link(href='/')
             | Home 
             span.sr-only (current)
-        //-if !session.passport.user
-        if !session.passport
-          li.nav-item
-            a.nav-link(href='/auth#register') Register
-          li.nav-item
-            a.nav-link(href='/auth#login') Login
-        else
-          li.nav-item
-            a.nav-link(href='/auth/logout') Logout
+        li.nav-item
+          a.nav-link(href='/auth#register') Register
+        li.nav-item
+          a.nav-link(href='/auth#login') Login
+        li.nav-item
+          a.nav-link(href='/auth/logout') Logout

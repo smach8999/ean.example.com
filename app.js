@@ -4,37 +4,32 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
+var apiUsersRouter = require('./routes/api/users');
+var LocalStrategy = require('passport-local').Strategy;
+var Users = require('./models/users');
+var apiAuthRouter = require('./routes/api/auth');
+var authRouter = require('./routes/auth');
+
+var app = express();
+
+var config = require('./config.dev');
 var mongoose = require('mongoose');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-
-var indexRouter = require('./routes/index');
-var Users = require('./models/users');
-var usersRouter = require('./routes/users');
-var apiUsersRouter = require('./routes/api/users');
-var apiAuthRouter = require('./routes/api/auth');
-var authRouter = require('./routes/auth');
-var app = express();
-//Call the config file
-var config = require('./config.dev');
-//Test the file
-// console.log(config);
-
-//Connect to MongoDB
-mongoose.connect(config.mongodb, { useNewUrlParser: true });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use('/api/users', apiUsersRouter);
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(require('express-session')({
   //Define the session store
   store: new MongoStore({
@@ -52,11 +47,11 @@ app.use(require('express-session')({
     maxAge:3600000 //1 hour
   }
 }));
-
-// Passport
 app.use(passport.initialize());
 app.use(passport.session());
+
 passport.use(Users.createStrategy());
+
 passport.serializeUser(function(user, done){
   done(null,{
     id: user._id,
@@ -66,20 +61,22 @@ passport.serializeUser(function(user, done){
     last_name: user.last_name
   });
 });
+
 passport.deserializeUser(function(user, done){
   done(null, user);
 });
 
-// Function
 app.use(function(req,res,next){
   res.locals.session = req.session;
   next();
-}); 
+});
+
 //~line 78
 //Session-based access control
 app.use(function(req,res,next){
   //Uncomment the following line to allow access to everything.
   //return next();
+
   //Allow any endpoint that is an exact match. The server does not
   //have access to the hash so /auth and /auth#xxx would bot be considered 
   //exact matches.
@@ -128,24 +125,23 @@ app.use('/api/users', apiUsersRouter);
 app.use('/api/auth', apiAuthRouter);
 app.use('/auth', authRouter);
 
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
+
   // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
 
-// console.log('connected to ');
-// console.log(config);
-
 //Connect to MongoDB
 mongoose.connect(config.mongodb, { useNewUrlParser: true });
+
 module.exports = app;
