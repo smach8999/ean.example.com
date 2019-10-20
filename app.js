@@ -70,7 +70,6 @@ passport.deserializeUser(function(user, done){
   done(null, user);
 });
 
-
 // Function
 app.use(function(req,res,next){
   res.locals.session = req.session;
@@ -81,7 +80,6 @@ app.use(function(req,res,next){
 app.use(function(req,res,next){
   //Uncomment the following line to allow access to everything.
   //return next();
-
   //Allow any endpoint that is an exact match. The server does not
   //have access to the hash so /auth and /auth#xxx would bot be considered 
   //exact matches.
@@ -147,4 +145,7 @@ app.use(function(err, req, res, next) {
 
 // console.log('connected to ');
 // console.log(config);
+
+//Connect to MongoDB
+mongoose.connect(config.mongodb, { useNewUrlParser: true });
 module.exports = app;
