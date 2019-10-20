@@ -30,7 +30,7 @@ mongoose.connect(config.mongodb, { useNewUrlParser: true });
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-
+app.use('/api/users', apiUsersRouter);
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
