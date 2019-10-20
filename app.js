@@ -22,7 +22,7 @@ var app = express();
 //Call the config file
 var config = require('./config.dev');
 //Test the file
-console.log(config);
+// console.log(config);
 
 //Connect to MongoDB
 mongoose.connect(config.mongodb, { useNewUrlParser: true });
