@@ -20,9 +20,7 @@ var Users = new Schema({
   admin: {
     type: Boolean,
     default: false
-  }
-
-  ,
+  },
   created: {
     type: Date,
     default: Date.now
