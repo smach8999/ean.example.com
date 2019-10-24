@@ -195,7 +195,9 @@ var usersApp = (function() {
             </div>
 
             <div class="form-group col-md-6">
-              <label for="email">Email</label>
+              <label for="email">Email</label> window.addEventListener("hashchange", function(){
+                usersApp.load();
+              });
               <input type="email" id="email" name="email" class="form-control" value="${data.user.email}" required>
             </div>
           </div>
@@ -253,21 +255,19 @@ var usersApp = (function() {
     let uri = `${window.location.origin}/api/users/${id}`;
     let xhr = new XMLHttpRequest();
     xhr.open('GET', uri);
-
+  
     xhr.setRequestHeader(
       'Content-Type',
       'application/json; charset=UTF-8'
-    ); window.addEventListener("hashchange", function(){
-      usersApp.load();
-    });
-
+    );
+  
     xhr.send();
-
+  
     xhr.onload = function(){
       let app = document.getElementById('app');
       let data = JSON.parse(xhr.response);
       let card = '';
-
+  
       card = `<div class="card bg-transparent border-danger text-danger bg-danger">
         <div class="card-header bg-transparent border-danger">
           <h2 class="h3 text-center">Your About to Delete a User</h2>
@@ -275,24 +275,54 @@ var usersApp = (function() {
         <div class="card-body text-center">
           <div>
             Are you sure you want to delete
-            <strong>${data.u window.addEventListener("hashchange", function(){
-              usersApp.load();
-            });ser.first_name} ${data.user.last_name}</strong>
+            <strong>${data.user.first_name} ${data.user.last_name}</strong>
           </div>
+  
           <div>Username: <strong>${data.user.username}</strong></div>
           <div>Email: <strong>${data.user.email}</strong></div>
+  
           <div class="text-center">
             <br>
-            <a class="btn btn-lg btn-danger text-white">
+            <a onclick="usersApp.deleteUser('${data.user._id}');" 
+            class="btn btn-lg btn-danger text-white">
+                  Yes delete ${data.user.username}
+            </a>
               Yes delete ${data.user.username}
             </a>
           </div>
+  
         </div>
       </div>`;
-
+  
       app.innerHTML = card;
     }
   }
+
+  function deleteUser(id){
+
+    let uri = `${window.location.origin}/api/users/${id}`;
+    let xhr = new XMLHttpRequest();
+    xhr.open('DELETE', uri);
+  
+    xhr.setRequestHeader(
+      'Content-Type',
+      'application/json; charset=UTF-8'
+    );
+  
+    xhr.send();
+  
+    xhr.onload = function(){
+      let data = JSON.parse(xhr.response);
+      if(data.success === true){
+        window.location.hash = '#';
+      }else{
+        alert('Unknown error, the user could not be deleted');
+      }
+  
+    }
+  
+  }
+
 
   return {
     load: function(){
@@ -321,12 +351,17 @@ var usersApp = (function() {
           viewUsers();
           break;
       }
+    },
+
+
+    deleteUser:function(id){
+      deleteUser(id);
     }
   }
-    
-})();
+    })();
     
     usersApp.load();
+    
     window.addEventListener("hashchange", function(){
       usersApp.load();
     });
