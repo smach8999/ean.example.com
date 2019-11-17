@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var Articles = require('../models/articles');
+var today = new Date();
 
-// router.get('/', function(req, res, next) {
-//   res.render('articles/index', { title: 'Article Management' });
-// });
+router.get('/app', function(req, res, next) {
+  res.render('articles/app', { title: 'Article Management' });
+});
+
 
 router.get('/', function(req, res, next) {
   Articles.find({},function(err, articles){
@@ -35,8 +37,5 @@ router.get('/view/:slug', function(req, res, next) {
 });
 
   
-  router.get('/app', function(req, res, next) {
-    res.render('articles/app', { title: 'Article Management' });
-  });
   
 module.exports = router;
