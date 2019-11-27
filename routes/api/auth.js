@@ -68,13 +68,21 @@ router.post('/login', function(req, res, next) {
   //   res.redirect('/auth');
   // });
 
+  //  commnent out for Ionic User project replaced to below code
+  // router.delete('/logout', function(req, res){
+  //   req.logout();
+  //   if(!req.session.passport.user){
+  //     return res.json({success: 'true'});
+  //   }else{
+  //     return res.json({success: 'false'});
+  //   }
+  // });
+      
+
+  //  replaced to about code for Ionic User project cause the passport not working
   router.delete('/logout', function(req, res){
-    req.logout();
-    if(!req.session.passport.user){
-      return res.json({success: 'true'});
-    }else{
-      return res.json({success: 'false'});
-    }
+    return res.json({success: 'false'});
   });
       
+
 module.exports = router;

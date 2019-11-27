@@ -104,9 +104,11 @@ app.use(function(req, res, next) {
 
 //~line 78
 //Session-based access control
-app.use(function(req,res,next){
-  //Uncomment the following line to allow access to everything.
-  return next(); 
+
+//  turn off for ionic testing
+// app.use(function(req,res,next){
+//   //Uncomment the following line to allow access to everything.
+//   return next(); 
 
   //Allow any endpoint that is an exact match. The server does not
   //have access to the hash so /auth and /auth#xxx would bot be considered 
@@ -130,7 +132,8 @@ app.use(function(req,res,next){
   var subs = [
     '/public/',
     '/api/auth/',
-    '/articles'
+    '/articles',
+    '/ionicUsers'
   ];
 
   //The query string provides a partial URL match beginning
